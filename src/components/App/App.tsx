@@ -21,11 +21,9 @@ export default function App() {
     setPage(1);
   }, [debouncedText]);
 
-  // Запрос через react-query
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['notes', debouncedText, page],
     queryFn: () => fetchNotes(page, debouncedText || ''),
-    // enabled: debouncedText.trim() !== '', // не дергать API если поле пустое
     placeholderData: keepPreviousData,
   });
 

@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
 
 interface ModalProps {
@@ -7,7 +8,20 @@ interface ModalProps {
 }
 
 export default function Modal({ onClose, children }: ModalProps) {
-  return (
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
+  return createPortal(
     <div
       className={css.backdrop}
       onClick={onClose}
@@ -15,11 +29,9 @@ export default function Modal({ onClose, children }: ModalProps) {
       aria-modal="true"
     >
       <div className={css.modal} onClick={e => e.stopPropagation()}>
-        <button className={css.closeBtn} onClick={onClose}>
-          ✕
-        </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root')!
   );
 }

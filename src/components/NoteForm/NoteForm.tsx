@@ -10,9 +10,12 @@ interface NoteFormProps {
 }
 
 const NoteSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
+  title: Yup.string()
+    .required('Title is required')
+    .min(3, 'Title should be at least 10 characters')
+    .max(50, 'Title is too long (50 characters)'),
   content: Yup.string()
-    .min(10, 'Content should be at least 10 characters')
+    .max(500, 'Content is too long (500 characters)')
     .required('Content is required'),
   tag: Yup.string()
     .required('Tag is required')
@@ -28,7 +31,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   const mutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] }); // обновляем список
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
       onClose();
     },
   });
