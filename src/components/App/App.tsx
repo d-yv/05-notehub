@@ -34,7 +34,11 @@ export default function App() {
       <header className={css.toolbar}>
         <SearchBox searchText={searchText} onUpdate={setSearchText} />
         {totalPages > 1 && (
-          <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          <Pagination
+            pageCount={totalPages}
+            currentPage={page}
+            onPageChange={setPage}
+          />
         )}
         <button className={css.button} onClick={openModal}>
           Create note +

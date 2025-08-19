@@ -23,6 +23,7 @@ export async function fetchNotes (page: number, userQuery: string=""): Promise<N
                 'Authorization': `Bearer ${NOTEHUB_KEY}`,
             }
         });
+
     return response.data;
 }
 
